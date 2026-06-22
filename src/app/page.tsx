@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Wand2, Copy, RefreshCw, Image, ChevronDown, ChevronRight,
-  Loader2, CheckCircle2, Circle, Moon, Sun, FileCode, Sparkles, Settings,
+  Loader2, CheckCircle2, Circle, Moon, Sun, FileCode, Sparkles, Settings, LayoutGrid,
 } from "lucide-react";
 import { ArticleAnalysis, ArticleCategory, LayoutStyle, ProviderConfig, PROVIDER_META } from "@/types";
 import { loadConfig } from "@/lib/storage";
@@ -11,6 +11,7 @@ import { callAI } from "@/lib/ai-client";
 import { TEMPLATE_GUIDES, HTML_SYSTEM_PROMPT } from "@/lib/templates";
 import { cleanHTMLOutput, extractJSON } from "@/lib/html-utils";
 import ProviderSettings from "@/components/ProviderSettings";
+import CardDeckPanel from "@/components/CardDeckPanel";
 import clsx from "clsx";
 
 // ── 默认自定义设计师 Prompt ──────────────────────────────────
@@ -103,6 +104,7 @@ export default function Home() {
   const [progress, setProgress]         = useState(0);
   const [analysisOpen, setAOpen]        = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [showCardDeck, setShowCardDeck] = useState(false);
   const [providerConfig, setConfig]     = useState<ProviderConfig | null>(null);
   const iframeRef  = useRef<HTMLIFrameElement>(null);
   const htmlAccRef = useRef("");
@@ -385,6 +387,7 @@ ${text.slice(0, 6000)}`;
           <TopBtn icon={<Copy      className="w-3.5 h-3.5" />} label="复制 HTML"  disabled={!hasOutput}             onClick={copyHTML} />
           <TopBtn icon={<FileCode  className="w-3.5 h-3.5" />} label="导出 HTML"  disabled={!hasOutput}             onClick={exportHTML} primary />
           <TopBtn icon={<Image     className="w-3.5 h-3.5" />} label="导出长图"   disabled={!hasOutput || isLoading} onClick={exportPNG} />
+          <TopBtn icon={<LayoutGrid className="w-3.5 h-3.5" />} label="卡片图套装" disabled={!analysis} onClick={() => setShowCardDeck(true)} />
         </div>
       </div>
 
@@ -605,6 +608,16 @@ ${text.slice(0, 6000)}`;
           current={providerConfig}
           onSave={(cfg) => setConfig(cfg)}
           onClose={() => setShowSettings(false)}
+        />
+      )}
+
+      {/* Card deck panel */}
+      {showCardDeck && (
+        <CardDeckPanel
+          analysis={analysis!}
+          articleText={text}
+          showToast={showToast}
+          onClose={() => setShowCardDeck(false)}
         />
       )}
 

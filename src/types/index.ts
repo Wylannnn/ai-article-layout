@@ -99,3 +99,81 @@ export interface GenerateRequest {
   analysis: ArticleAnalysis;
   category: ArticleCategory;
 }
+
+// ── 卡片图套装 ──────────────────────────────────────────
+
+export interface CardPlatformPreset {
+  id: string;
+  label: string;
+  shortLabel: string;
+  width: number;
+  height: number;
+}
+
+export const CARD_PLATFORMS: CardPlatformPreset[] = [
+  { id: "xhs34", label: "小红书 3:4", shortLabel: "小红书", width: 1080, height: 1440 },
+  { id: "xhs11", label: "小红书 1:1", shortLabel: "小红书方图", width: 1080, height: 1080 },
+  { id: "dy34", label: "抖音图文 3:4", shortLabel: "抖音", width: 1080, height: 1440 },
+  { id: "dy916", label: "抖音图文 9:16", shortLabel: "抖音竖屏", width: 1080, height: 1920 },
+  { id: "moments", label: "朋友圈 1:1", shortLabel: "朋友圈", width: 1080, height: 1080 },
+  { id: "custom", label: "自定义尺寸", shortLabel: "自定义", width: 1080, height: 1440 },
+];
+
+export interface CardTheme {
+  id: string;
+  name: string;
+  // 主色 — 封面顶部色带、章节标记、数字高亮
+  primary: string;
+  // 辅色 — 渐变终点、装饰元素
+  secondary: string;
+  // 背景色 — 卡片整体背景
+  bg: string;
+  // 标题色
+  title: string;
+  // 正文色
+  text: string;
+  // 浅色装饰色 — 分割线、标签底
+  subtle: string;
+}
+
+export const CARD_THEMES_BY_CATEGORY: Record<ArticleCategory, CardTheme> = {
+  tech:     { id: "tech",     name: "科技",     primary: "#4f46e5", secondary: "#818cf8", bg: "#ffffff", title: "#0f172a", text: "#334155", subtle: "#eef2ff" },
+  finance:  { id: "finance",  name: "财经",     primary: "#1e3a5f", secondary: "#2d5a87", bg: "#ffffff", title: "#0f172a", text: "#334155", subtle: "#f1f5f9" },
+  travel:   { id: "travel",   name: "旅行",     primary: "#ea580c", secondary: "#f97316", bg: "#ffffff", title: "#1c1917", text: "#44403c", subtle: "#fff7ed" },
+  tutorial: { id: "tutorial", name: "教程",     primary: "#047857", secondary: "#10b981", bg: "#ffffff", title: "#0f172a", text: "#334155", subtle: "#f0fdf4" },
+  story:    { id: "story",    name: "故事",     primary: "#be185d", secondary: "#ec4899", bg: "#ffffff", title: "#1f2937", text: "#374151", subtle: "#fdf2f8" },
+  news:     { id: "news",     name: "新闻",     primary: "#b91c1c", secondary: "#ef4444", bg: "#ffffff", title: "#111827", text: "#374151", subtle: "#fef2f2" },
+};
+
+export const CARD_THEMES_EXTRAS: CardTheme[] = [
+  { id: "minimal", name: "极简灰", primary: "#374151", secondary: "#6b7280", bg: "#ffffff", title: "#111827", text: "#4b5563", subtle: "#f3f4f6" },
+  { id: "warm",    name: "暖阳",   primary: "#92400e", secondary: "#d97706", bg: "#fffbeb", title: "#1c1917", text: "#44403c", subtle: "#fef3c7" },
+];
+
+export type CardType = "cover" | "content" | "ending";
+
+export type ContentCardStyle = "auto" | "article" | "steps" | "data";
+
+export interface CardSettings {
+  platformId: string;
+  customWidth: number;
+  customHeight: number;
+  themeId: string; // "auto" 表示跟随文章分类，否则是 CardTheme.id
+  contentStyle: ContentCardStyle;
+  accountHandle: string;
+  endingSlogan: string;
+}
+
+export interface CardPage {
+  type: CardType;
+  label: string;
+  sectionIndex?: number; // which section this maps to
+  html: string;
+}
+
+export interface GeneratedCard {
+  id: string;
+  type: CardType;
+  label: string;
+  dataUrl: string;
+}

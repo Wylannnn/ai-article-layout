@@ -3,9 +3,10 @@
  * Key 存在 localStorage，不上传任何服务器
  */
 
-import { AIProvider, ProviderConfig, PROVIDER_META } from "@/types";
+import { AIProvider, CardSettings, ProviderConfig, PROVIDER_META } from "@/types";
 
 const STORAGE_KEY = "ai-layout-provider-config";
+const CARD_SETTINGS_KEY = "ai-layout-card-settings";
 
 export function saveConfig(config: ProviderConfig): void {
   if (typeof window === "undefined") return;
@@ -34,5 +35,21 @@ export function defaultConfig(provider: AIProvider): ProviderConfig {
     apiKey: "",
     model: PROVIDER_META[provider].defaultModel,
   };
+}
+
+export function saveCardSettings(settings: CardSettings): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(CARD_SETTINGS_KEY, JSON.stringify(settings));
+}
+
+export function loadCardSettings(): CardSettings | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(CARD_SETTINGS_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as CardSettings;
+  } catch {
+    return null;
+  }
 }
 
