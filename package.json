@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
-    "pack": "npm run build && mkdir -p dist && cp -r out dist/ai-article-layout/ && cp scripts/start.command dist/ai-article-layout/ && cp scripts/start.bat dist/ai-article-layout/ && chmod +x dist/ai-article-layout/start.command && cd dist && zip -r ai-article-layout.zip ai-article-layout/ && cd .. && echo '✅ Package ready: dist/ai-article-layout.zip'"
+    "pack": "npm run build && mkdir -p dist/ai-article-layout/out && cp -r out/* dist/ai-article-layout/out/ && cp scripts/start.command dist/ai-article-layout/ && cp scripts/start.bat dist/ai-article-layout/ && chmod +x dist/ai-article-layout/start.command && cd dist && zip -r ai-article-layout.zip ai-article-layout/ && cd .. && echo '✅ Package ready: dist/ai-article-layout.zip'"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",

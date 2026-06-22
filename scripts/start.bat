@@ -9,22 +9,27 @@ echo =====================================
 
 cd /d "%~dp0"
 
+set SERVE_DIR=.
+if exist out\ (
+  set SERVE_DIR=out
+)
+
 where python >nul 2>nul
 if %ERRORLEVEL% equ 0 (
-  python -m http.server 3000 --directory out
+  python -m http.server 3000 --directory %SERVE_DIR%
   goto :end
 )
 
 where python3 >nul 2>nul
 if %ERRORLEVEL% equ 0 (
-  python3 -m http.server 3000 --directory out
+  python3 -m http.server 3000 --directory %SERVE_DIR%
   goto :end
 )
 
 echo 未找到 Python，请安装 Python 3 后重新运行此脚本。
 echo 下载地址: https://www.python.org/downloads/
 echo.
-echo 或者安装 Node.js 后运行: npx serve out
+echo 或者安装 Node.js 后运行: npx serve .
 pause
 
 :end

@@ -16,6 +16,8 @@
 ### 修复
 
 - README 新增醒目警告：切勿直接双击 `out/index.html` 打开（Next.js 静态导出资源路径为绝对路径，`file://` 协议下所有 JS/CSS 加载失败导致 404 或空白页）
+- 修复 `npm run pack` 打包脚本：`cp -r out dist/ai-article-layout/` 在目标目录不存在时会直接复制为 `dist/ai-article-layout` 而不是创建 `out/` 子目录，导致 `start.command --directory out` 找不到文件，所有请求返回 404
+- 修复 `start.command` 和 `start.bat`：自动检测 `out/` 目录是否存在，不存在则直接从当前目录提供 HTTP 服务
 
 ## v0.3.0
 
