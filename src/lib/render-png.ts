@@ -55,8 +55,11 @@ export async function renderCardDeck(
 ): Promise<{ id: string; label: string; dataUrl: string }[]> {
   const results: { id: string; label: string; dataUrl: string }[] = [];
 
+  if (!pages || pages.length === 0) return results;
+
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
+    if (!page || !page.html) continue;
     const dataUrl = await renderCardToDataUrl(page.html, width, height);
     results.push({ id: page.id, label: page.label, dataUrl });
     onProgress?.(i + 1, pages.length);

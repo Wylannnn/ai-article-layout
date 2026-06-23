@@ -73,8 +73,8 @@ describe("splitSection", () => {
     };
     const chunks = splitSection(section, 0);
     expect(chunks.length).toBe(2);
-    expect(chunks[0].steps).toHaveLength(4);
-    expect(chunks[1].steps).toHaveLength(1);
+    expect(chunks[0].steps).toHaveLength(3);
+    expect(chunks[1].steps).toHaveLength(2);
     expect(chunks[1].isContinuation).toBe(true);
   });
 

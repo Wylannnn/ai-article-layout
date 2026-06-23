@@ -14,10 +14,10 @@ interface Props {
   analysis: ArticleAnalysis;
   articleText: string;
   showToast: (msg: string) => void;
-  onClose: () => void;
+  onBack?: () => void;
 }
 
-export default function CardDeckPanel({ analysis, articleText, showToast, onClose }: Props) {
+export default function CardDeckPanel({ analysis, articleText, showToast, onBack }: Props) {
   // Load saved settings or use defaults
   const saved = loadCardSettings();
   const [platformId, setPlatformId] = useState(saved?.platformId ?? "xhs34");
@@ -119,22 +119,20 @@ export default function CardDeckPanel({ analysis, articleText, showToast, onClos
   const isCustomPlatform = platformId === "custom";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-8 pb-8 overflow-y-auto"
-      style={{ background: "rgba(0,0,0,0.5)" }}>
-      <div className="w-full max-w-2xl rounded-xl overflow-hidden shadow-2xl"
-        style={{ background: "var(--bg, #ffffff)" }}>
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3"
-          style={{ borderBottom: "1px solid var(--border, #e5e7eb)" }}>
-          <h2 className="text-sm font-semibold" style={{ color: "var(--text, #111827)" }}>
-            🃏 卡片图套装
-          </h2>
-          <button onClick={onClose} className="text-xs px-2 py-1 rounded hover:bg-[var(--bg-secondary,#f3f4f6)]"
-            style={{ color: "var(--text-secondary, #6b7280)" }}>✕ 关闭</button>
-        </div>
+    <div className="h-full overflow-y-auto" style={{ background: "var(--bg, #ffffff)" }}>
+      <div className="p-5 space-y-4">
 
-        {/* Body */}
-        <div className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+          {/* Header with back button */}
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold" style={{ color: "var(--text, #111)" }}>🃏 卡片图套装</span>
+            {onBack && (
+              <button onClick={onBack}
+                className="text-xs px-3 py-1.5 rounded-lg border transition-colors hover:bg-[var(--bg-secondary)]"
+                style={{ borderColor: "var(--border, #e5e7eb)", color: "var(--text-secondary, #6b7280)" }}>
+                ← 返回预览
+              </button>
+            )}
+          </div>
 
           {/* Platform */}
           <div>
@@ -305,7 +303,6 @@ export default function CardDeckPanel({ analysis, articleText, showToast, onClos
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

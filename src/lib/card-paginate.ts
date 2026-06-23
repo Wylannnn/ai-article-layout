@@ -108,7 +108,7 @@ export function splitSection(
 
   if (section.steps && section.steps.length > 0) {
     // Steps mode — split steps across cards
-    const perCard = 4; // max 4 steps per card
+    const perCard = 3; // max 3 steps per card
     for (let i = 0; i < section.steps.length; i += perCard) {
       chunks.push({
         sectionIndex,

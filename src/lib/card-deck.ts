@@ -91,19 +91,26 @@ export function buildCardDeck(
   const { width, height } = platform;
   const p = propsFromTheme(width, height, theme);
 
+  // Guard: missing/incomplete analysis
+  const safeTitle = analysis?.title || "无标题";
+  const safeSummary = analysis?.summary || "";
+  const safeCategory = analysis?.category || "article";
+  const safeKeywords = analysis?.keywords?.filter(Boolean) || [];
+  const safeSections = analysis?.sections?.filter(Boolean) || [];
+
   // 1. Cover card
-  const readTime = estimateReadTime(articleText);
-  const categoryLabel = CATEGORY_LABELS[analysis.category] || analysis.category;
+  const readTime = estimateReadTime(articleText || safeSummary);
+  const categoryLabel = CATEGORY_LABELS[safeCategory] || safeCategory;
   pages.push({
     type: "cover",
     label: "封面",
     html: coverCardHTML(p, {
       categoryLabel,
-      title: analysis.title,
-      summary: analysis.summary,
+      title: safeTitle,
+      summary: safeSummary,
       readTime,
       author: accountHandle || "AI 排版工具",
-      keywords: analysis.keywords,
+      keywords: safeKeywords,
     }),
   });
 
@@ -111,19 +118,20 @@ export function buildCardDeck(
   let totalChunks = 0;
   const allChunks: { chunk: SectionChunk; sectionText: string }[] = [];
 
-  for (let i = 0; i < analysis.sections.length; i++) {
-    const section = analysis.sections[i];
-    const parsed = parseSection(section.content);
-    const chunks = splitSection(parsed, i,
-      contentStyle === "data" ? 400 : 600,
-      section.title
-    );
+  for (let i = 0; i < safeSections.length; i++) {
+    const section = safeSections[i];
+    const sectionContent = section?.content || section?.title || "";
+    const sectionTitle = section?.title || `第 ${i + 1} 节`;
+    const parsed = parseSection(sectionContent);
+    const isData = contentStyle === "data";
+    const maxChars = isData ? 280 : 420;
+    const chunks = splitSection(parsed, i, maxChars, sectionTitle);
     for (const c of chunks) {
-      allChunks.push({ chunk: c, sectionText: section.content });
+      allChunks.push({ chunk: c, sectionText: sectionContent });
     }
   }
 
-  totalChunks = allChunks.length;
+  totalChunks = Math.max(allChunks.length, 1);
 
   for (let ci = 0; ci < allChunks.length; ci++) {
     const { chunk, sectionText } = allChunks[ci];
