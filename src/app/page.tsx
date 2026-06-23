@@ -3,13 +3,15 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Wand2, Copy, RefreshCw, Image, ChevronDown, ChevronRight,
-  Loader2, CheckCircle2, Circle, Moon, Sun, FileCode, Sparkles, Settings, LayoutGrid,
+  Loader2, CheckCircle2, Circle, Moon, Sun, FileCode, Sparkles, Settings,
 } from "lucide-react";
 import { ArticleAnalysis, ArticleCategory, LayoutStyle, ProviderConfig, PROVIDER_META } from "@/types";
 import { loadConfig } from "@/lib/storage";
 import { callAI } from "@/lib/ai-client";
 import { TEMPLATE_GUIDES, HTML_SYSTEM_PROMPT } from "@/lib/templates";
 import { cleanHTMLOutput, extractJSON } from "@/lib/html-utils";
+import { splitContentIntoBlocks, checkSplitIntegrity } from "@/lib/content-blocks";
+import { injectContentBlocks, buildFallbackHTML } from "@/lib/inject-content";
 import ProviderSettings from "@/components/ProviderSettings";
 import CardDeckPanel from "@/components/CardDeckPanel";
 import clsx from "clsx";
@@ -99,12 +101,13 @@ export default function Home() {
   const [steps, setSteps]               = useState<Step[]>(INITIAL_STEPS);
   const [isLoading, setLoading]         = useState(false);
   const [error, setError]               = useState("");
+  const [truncationWarning, setTruncationWarning] = useState("");
   const [toast, setToast]               = useState("");
   const [dark, setDark]                 = useState(false);
   const [progress, setProgress]         = useState(0);
   const [analysisOpen, setAOpen]        = useState(true);
   const [showSettings, setShowSettings] = useState(false);
-  const [showCardDeck, setShowCardDeck] = useState(false);
+  const [cardDeckMode, setCardDeckMode]   = useState(false);
   const [providerConfig, setConfig]     = useState<ProviderConfig | null>(null);
   const iframeRef  = useRef<HTMLIFrameElement>(null);
   const htmlAccRef = useRef("");
@@ -160,6 +163,7 @@ export default function Home() {
       setError("自定义 Prompt 太短，请描述你想要的风格"); return;
     }
     setError("");
+    setTruncationWarning("");
     setLoading(true);
     setHTML("");
     setProgress(0);
@@ -173,7 +177,7 @@ export default function Home() {
       const raw = await callAI(
         providerConfig,
         [{ role: "user", content: text.slice(0, 4000) }],
-        { system: ANALYSIS_SYSTEM, maxTokens: 1500, jsonMode: true, prefill: "{" }
+        { system: ANALYSIS_SYSTEM, maxTokens: 3000, jsonMode: true, prefill: "{" }
       );
       // prefill "{" makes the model continue from {, so raw may not include the leading {
       const full = raw.startsWith("{") ? raw : "{" + raw;
@@ -182,10 +186,37 @@ export default function Home() {
         throw new Error("AI 返回中未找到 JSON，原始响应: " + raw.slice(0, 200));
       }
       const a: ArticleAnalysis = JSON.parse(jsonStr);
+
+      // Check: step 1 JSON truncation — structure must be complete
+      if (!a.title || !a.sections || !Array.isArray(a.sections) || a.sections.length === 0) {
+        throw new Error(
+          "AI 返回的文章结构不完整（内容生成被截断），请尝试：\n" +
+          "1. 缩短文章内容\n" +
+          "2. 点击「重新生成」再试一次（AI 输出存在随机性）"
+        );
+      }
+      if (!raw.trim().endsWith("}")) {
+        setTruncationWarning(
+          "⚠ AI 分析结果可能存在截断，部分章节信息不完整。如后续排版效果不理想，请缩短文章后重试。"
+        );
+      }
+
       setAnalysis(a);
       setStep(0, "done");
       setStep(1, "done");
       setStep(2, "done");
+
+      // ★ 按章节切分原文，得到不经过LLM转写的内容块
+      const splitResult = splitContentIntoBlocks(text, a.sections);
+      const integrityCheck = checkSplitIntegrity(splitResult);
+      if (!integrityCheck.ok) {
+        console.warn(
+          "[内容切分异常]",
+          "字符差异:", integrityCheck.charDiff,
+          "句子断裂:", integrityCheck.hasBrokenSentence
+        );
+      }
+      const contentBlocks = splitResult.blocks;
 
       // ── Step 4: Generate HTML (streaming) ─────────────────
       setStep(3, "active");
@@ -210,16 +241,13 @@ ${guide}
 关键词：${a.keywords.join("、")}
 摘要：${a.summary}
 
-章节结构：
-${a.sections.map((s, i) => `${i + 1}. ${s.title}\n   ${s.content}`).join("\n\n")}
+章节清单（请为每个章节设计标题，并在对应位置放置空占位符）：
+${a.sections.map((s, i) => `${i + 1}. 标题：${s.title}\n   占位符：<div class="section-content" data-block-id="block_${i + 1}"></div>`).join("\n\n")}
 
 配图方向（请生成主题相关SVG插画）：
 - 封面：${a.imagePrompts[0] ?? ""}
 - 插图1：${a.imagePrompts[1] ?? ""}
-- 插图2：${a.imagePrompts[2] ?? ""}
-
-原文（请保留完整内容排版）：
-${text.slice(0, 6000)}`;
+- 插图2：${a.imagePrompts[2] ?? ""}`;
 
       let received = 0;
       await callAI(
@@ -227,7 +255,7 @@ ${text.slice(0, 6000)}`;
         [{ role: "user", content: userPrompt }],
         {
           system: HTML_SYSTEM_PROMPT,
-          maxTokens: 16000,
+          maxTokens: 32000,
           stream: true,
           onChunk: (chunk) => {
             htmlAccRef.current += chunk;
@@ -237,7 +265,32 @@ ${text.slice(0, 6000)}`;
           },
         }
       );
-      setHTML(cleanHTMLOutput(htmlAccRef.current));
+      const skeleton = cleanHTMLOutput(htmlAccRef.current);
+      // 先校验骨架完整性（截断检测）
+      if (!skeleton.includes("</html>") || !skeleton.includes("</body>")) {
+        throw new Error(
+          "排版生成不完整（内容在生成过程中被截断）。建议：\n" +
+          "1. 尝试切换到更简洁的排版风格（如「故事」「教程」风格，复杂度更低）\n" +
+          "2. 适当缩短文章内容后重试\n" +
+          "3. 直接点击「重新生成」再试一次（AI 输出存在随机性）"
+        );
+      }
+      // 注入真实原文内容（替代模型自己写正文）
+      const { html: injectedHTML, report: injectionReport } = injectContentBlocks(skeleton, contentBlocks);
+      if (injectionReport.fullyDegraded) {
+        console.warn("[排版异常] 模型未输出任何有效占位符，已降级为基础模板");
+        const fallbackHTML = buildFallbackHTML(a.title, contentBlocks);
+        setHTML(fallbackHTML);
+        showToast("⚠ AI 排版生成异常，已使用基础模板保证内容完整");
+      } else {
+        if (injectionReport.orphanPlaceholderIds.length > 0) {
+          console.warn("[排版异常] 模型生成了不存在的占位符id:", injectionReport.orphanPlaceholderIds);
+        }
+        if (injectionReport.missingPlaceholderIds.length > 0) {
+          console.warn("[排版异常] 模型漏写了章节占位符，已自动补救:", injectionReport.missingPlaceholderIds);
+        }
+        setHTML(injectedHTML);
+      }
       setProgress(100);
       setStep(3, "done");
     } catch (e) {
@@ -387,7 +440,6 @@ ${text.slice(0, 6000)}`;
           <TopBtn icon={<Copy      className="w-3.5 h-3.5" />} label="复制 HTML"  disabled={!hasOutput}             onClick={copyHTML} />
           <TopBtn icon={<FileCode  className="w-3.5 h-3.5" />} label="导出 HTML"  disabled={!hasOutput}             onClick={exportHTML} primary />
           <TopBtn icon={<Image     className="w-3.5 h-3.5" />} label="导出长图"   disabled={!hasOutput || isLoading} onClick={exportPNG} />
-          <TopBtn icon={<LayoutGrid className="w-3.5 h-3.5" />} label="卡片图套装" disabled={!analysis} onClick={() => setShowCardDeck(true)} />
         </div>
       </div>
 
@@ -546,6 +598,14 @@ ${text.slice(0, 6000)}`;
               </div>
             )}
 
+            {/* Truncation warning (non-blocking, yellow style) */}
+            {truncationWarning && !error && (
+              <div className="text-xs px-3 py-2 rounded-lg"
+                style={{ background: "#fffbeb", border: "1px solid #fde68a", color: "#92400e" }}>
+                {truncationWarning}
+              </div>
+            )}
+
             <div className="flex-1" style={{ minHeight: 12 }} />
 
             {/* Generate button */}
@@ -563,12 +623,35 @@ ${text.slice(0, 6000)}`;
           </div>
         </div>
 
-        {/* Right: preview */}
+        {/* Right: preview / card deck */}
         <div className="flex-1 flex flex-col overflow-hidden min-h-[50vh] md:min-h-0">
           <div className="flex items-center justify-between px-4 flex-shrink-0"
             style={{ height: 40, background: "var(--bg)", borderBottom: "1px solid var(--border)" }}>
-            <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>实时预览</span>
-            {analysis && (
+            <div className="flex items-center gap-0">
+              <button onClick={() => setCardDeckMode(false)}
+                className="text-xs px-3 py-1.5 rounded-t transition-all"
+                style={{
+                  color: !cardDeckMode ? "var(--text)" : "var(--text-tertiary)",
+                  fontWeight: !cardDeckMode ? 600 : 400,
+                  borderBottom: !cardDeckMode ? "2px solid var(--text)" : "2px solid transparent",
+                  marginBottom: -1,
+                }}>
+                实时预览
+              </button>
+              <button onClick={() => analysis && setCardDeckMode(true)}
+                className="text-xs px-3 py-1.5 rounded-t transition-all"
+                style={{
+                  color: cardDeckMode ? "var(--text)" : analysis ? "var(--text-tertiary)" : "var(--text-tertiary)",
+                  fontWeight: cardDeckMode ? 600 : 400,
+                  borderBottom: cardDeckMode ? "2px solid var(--text)" : "2px solid transparent",
+                  marginBottom: -1,
+                  opacity: !analysis ? 0.4 : 1,
+                  cursor: analysis ? "pointer" : "not-allowed",
+                }}>
+                🃏 卡片图套装
+              </button>
+            </div>
+            {!cardDeckMode && analysis && (
               <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>
                 {selectedStyle === "custom"
                   ? "🎨 自定义风格"
@@ -578,20 +661,25 @@ ${text.slice(0, 6000)}`;
             )}
           </div>
           <div className="flex-1 relative overflow-hidden">
-            {!hasOutput && !isLoading && (
+            {cardDeckMode && analysis ? (
+              <CardDeckPanel
+                analysis={analysis}
+                articleText={text}
+                showToast={showToast}
+                onBack={() => setCardDeckMode(false)}
+              />
+            ) : !hasOutput && !isLoading ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3"
                 style={{ color: "var(--text-tertiary)" }}>
                 <Wand2 className="w-10 h-10 opacity-20" />
                 <p className="text-sm">输入文章，点击「开始智能排版」</p>
               </div>
-            )}
-            {isLoading && !hasOutput && (
+            ) : isLoading && !hasOutput ? (
               <div className="absolute inset-0 flex items-center justify-center"
                 style={{ color: "var(--text-tertiary)" }}>
                 <Loader2 className="w-8 h-8 animate-spin opacity-30" />
               </div>
-            )}
-            {hasOutput && (
+            ) : (
               <iframe ref={iframeRef} srcDoc={generatedHTML}
                 className="w-full h-full border-none"
                 sandbox="allow-scripts allow-same-origin"
@@ -608,16 +696,6 @@ ${text.slice(0, 6000)}`;
           current={providerConfig}
           onSave={(cfg) => setConfig(cfg)}
           onClose={() => setShowSettings(false)}
-        />
-      )}
-
-      {/* Card deck panel */}
-      {showCardDeck && (
-        <CardDeckPanel
-          analysis={analysis!}
-          articleText={text}
-          showToast={showToast}
-          onClose={() => setShowCardDeck(false)}
         />
       )}
 
