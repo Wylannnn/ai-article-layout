@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡片视觉方案 · 按平台分类</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&family=Source+Serif+4:wght@400;600;700&family=Noto+Serif+SC:wght@600;700;900&family=Space+Grotesk:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Inter',-apple-system,sans-serif;
+    background:#f0efea;
+    padding:40px 20px;
+    color:#1a1a1a;
+  }
+  .hdr{max-width:1280px;margin:0 auto 40px}
+  .hdr h1{font-size:28px;font-weight:800;margin-bottom:6px}
+  .hdr p{font-size:14px;color:#666;line-height:1.6}
+
+  .platform{max-width:1280px;margin:0 auto 56px}
+  .platform-header{
+    display:flex;align-items:center;gap:12px;
+    padding-bottom:12px;margin-bottom:24px;
+    border-bottom:2px solid #ddd;
+  }
+  .platform-icon{font-size:24px}
+  .platform-name{font-size:20px;font-weight:700}
+  .platform-desc{font-size:13px;color:#888;margin-left:auto}
+  .platform-specs{font-size:12px;color:#999;margin-left:16px}
+
+  .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+
+  .option{
+    background:#fff;border-radius:16px;overflow:hidden;
+    box-shadow:0 2px 16px rgba(0,0,0,0.06);
+    transition:transform 0.15s;
+  }
+  .option:hover{transform:translateY(-3px)}
+
+  .option-header{
+    padding:14px 18px;border-bottom:1px solid #f0f0f0;
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .option-name{font-size:14px;font-weight:700}
+  .option-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;letter-spacing:0.3px}
+
+  .card-preview{padding:20px;display:flex;align-items:center;justify-content:center;min-height:340px}
+
+  /* ===== 卡片通用 ===== */
+  .card{
+    width:280px;overflow:hidden;position:relative;
+    font-family:'Inter',-apple-system,sans-serif;
+  }
+  .card-tag{font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px}
+  .card-title{font-size:18px;line-height:1.3;margin-bottom:8px}
+  .card-desc{font-size:12px;line-height:1.6;margin-bottom:12px}
+  .card-points{list-style:none;margin-bottom:14px}
+  .card-points li{font-size:11.5px;line-height:1.5;padding-left:14px;position:relative;margin-bottom:5px}
+  .card-points li::before{position:absolute;left:0}
+  .card-cta{display:inline-block;font-size:11px;font-weight:600;padding:7px 18px;border-radius:6px;text-decoration:none}
+  .card-meta{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid;font-size:11px}
+  .card-ava{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+
+  /* ---- 方案标签色 ---- */
+  .tag-a{background:#e8d5c4;color:#8b6914}
+  .tag-b{background:#d4e4df;color:#1a6b5a}
+  .tag-c{background:#f0e2d0;color:#a0522d}
+  .tag-d{background:#dae2f0;color:#2d5a87}
+  .tag-e{background:#ffe0b2;color:#e65100}
+  .tag-f{background:#e0f2fe;color:#0369a1}
+  .tag-g{background:#f3e8ff;color:#7c3aed}
+  .tag-h{background:#fce7f3;color:#be185d}
+  .tag-i{background:#e0e7ff;color:#4338ca}
+  .tag-j{background:#fef3c7;color:#92400e}
+
+  /* 规格标签 */
+  .spec{display:inline-block;font-size:9px;font-weight:500;padding:2px 7px;border-radius:3px;background:#f5f5f0;color:#777;margin:1px}
+  .specs{padding:10px 18px;background:#fafaf8;border-top:1px solid #eee;display:flex;flex-wrap:wrap;gap:2px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>卡片视觉方案 · 按平台分类</h1>
+  <p>每个平台 2-3 种视觉方向，内容相同，方便对比</p>
+</div>
+
+<!-- ================================================================ -->
+<!--  平台 1: 小红书  -->
+<!-- ================================================================ -->
+<div class="platform">
+  <div class="platform-header">
+    <span class="platform-icon">📕</span>
+    <span class="platform-name">小红书</span>
+    <span class="platform-desc">3:4 (1080×1440) / 1:1</span>
+    <span class="platform-specs">柔和·有温度·杂志感</span>
+  </div>
+  <div class="options">
+
+    <!-- 方案 A: 轻柔知性 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 A · 轻柔知性</span>
+        <span class="option-tag tag-a">暖米 · 干枯玫瑰</span>
+      </div>
+      <div class="card-preview" style="background:#f5f0ea">
+        <div class="card" style="background:#fcf9f5;border-radius:20px;padding:28px 24px;box-shadow:0 4px 20px rgba(180,140,100,0.08)">
+          <div class="card-tag" style="color:#c17a74">方法论</div>
+          <div class="card-title" style="font-family:'Source Serif 4',serif;font-weight:700;color:#2c2c2c">AI 产品经理的核心能力框架</div>
+          <div class="card-desc" style="color:#7a7a7a">从需求分析到模型落地，这 4 个能力决定了你能不能做好 AI 产品。</div>
+          <ul class="card-points">
+            <li style="color:#5c5c5c">技术理解力：知道模型能做什么、不能做什么</li>
+            <li style="color:#5c5c5c">数据敏感度：训练数据质量决定产品上限</li>
+            <li style="color:#5c5c5c">体验设计力：AI 的不确定性需要新的交互范式</li>
+          </ul>
+          <a class="card-cta" style="background:#c17a74;color:#fff" href="#">阅读全文 →</a>
+          <div class="card-meta" style="border-top-color:rgba(180,140,100,0.12)">
+            <div class="card-ava" style="background:#c17a74;color:#fff">W</div>
+            <span style="color:#888">Waylan · 4 分钟</span>
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">暖米白 #fcf9f5</span>
+        <span class="spec">干枯玫瑰 #c17a74</span>
+        <span class="spec">Source Serif 衬线标题</span>
+        <span class="spec">大圆角 20px</span>
+        <span class="spec">低饱和 · 温柔感</span>
+      </div>
+    </div>
+
+    <!-- 方案 B: 清新薄荷 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 B · 清新薄荷</span>
+        <span class="option-tag tag-b">冷白 · 薄荷绿</span>
+      </div>
+      <div class="card-preview" style="background:#eef4f2">
+        <div class="card" style="background:#ffffff;border-radius:18px;padding:28px 24px;box-shadow:0 2px 16px rgba(74,157,142,0.08);border:1px solid rgba(74,157,142,0.06)">
+          <div class="card-tag" style="color:#4a9d8e">AI · 效率</div>
+          <div class="card-title" style="font-weight:700;color:#1a2e2b">AI 产品经理的核心能力框架</div>
+          <div class="card-desc" style="color:#5a7a72">从需求分析到模型落地，这 4 个能力决定了你能不能做好 AI 产品。</div>
+          <ul class="card-points">
+            <li style="color:#4a6b62">技术理解力：知道模型能做什么、不能做什么</li>
+            <li style="color:#4a6b62">数据敏感度：训练数据质量决定产品上限</li>
+            <li style="color:#4a6b62">体验设计力：AI 的不确定性需要新的交互范式</li>
+          </ul>
+          <a class="card-cta" style="background:#4a9d8e;color:#fff" href="#">阅读全文 →</a>
+          <div class="card-meta" style="border-top-color:rgba(74,157,142,0.1)">
+            <div class="card-ava" style="background:#4a9d8e;color:#fff">W</div>
+            <span style="color:#7a9a92">Waylan · 4 分钟</span>
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">纯白底 #fff</span>
+        <span class="spec">薄荷绿 #4a9d8e</span>
+        <span class="spec">无衬线 Inter</span>
+        <span class="spec">圆角 18px</span>
+        <span class="spec">浅绿边线</span>
+        <span class="spec">AI/效率内容</span>
+      </div>
+    </div>
+
+    <!-- 方案 C: 纸张质感 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 C · 纸张手帐</span>
+        <span class="option-tag tag-c">暖米 · 陶土棕</span>
+      </div>
+      <div class="card-preview" style="background:#efe8dd">
+        <div class="card" style="background:#faf6f0;border-radius:16px;padding:30px 26px;box-shadow:0 2px 12px rgba(139,94,60,0.06);border:1px solid rgba(139,94,60,0.06)">
+          <div class="card-tag" style="color:#8b5e3c;font-family:'Source Serif 4',serif;font-weight:600">◈ 方法论</div>
+          <div class="card-title" style="font-family:'Noto Serif SC',serif;font-weight:700;color:#292524">AI 产品经理的核心能力框架</div>
+          <div class="card-desc" style="color:#78716c">从需求分析到模型落地，这 4 个能力决定了你能不能做好 AI 产品。</div>
+          <ul class="card-points">
+            <li style="color:#57534e">技术理解力：知道模型能做什么、不能做什么</li>
+            <li style="color:#57534e">数据敏感度：训练数据质量决定产品上限</li>
+            <li style="color:#57534e">体验设计力：AI 的不确定性需要新的交互范式</li>
+          </ul>
+          <a class="card-cta" style="background:#8b5e3c;color:#faf6f0" href="#">阅读全文 →</a>
+          <div class="card-meta" style="border-top-color:rgba(139,94,60,0.1)">
+            <div class="card-ava" style="background:#8b5e3c;color:#faf6f0">W</div>
+            <span style="color:#9a928c">Waylan · 4 分钟</span>
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">暖纸底 #faf6f0</span>
+        <span class="spec">陶土棕 #8b5e3c</span>
+        <span class="spec">Noto Serif SC 标题</span>
+        <span class="spec">圆角 16px</span>
+        <span class="spec">纸感边框</span>
+        <span class="spec">读书/人文类</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!--  平台 2: 抖音图文  -->
+<!-- ================================================================ -->
+<div class="platform">
+  <div class="platform-header">
+    <span class="platform-icon">🎵</span>
+    <span class="platform-name">抖音图文</span>
+    <span class="platform-desc">3:4 (1080×1440) / 9:16 (1080×1920)</span>
+    <span class="platform-specs">高能量 · 强视觉 · 大标题</span>
+  </div>
+  <div class="options">
+
+    <!-- 方案 D: 渐变大字 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 D · 渐变大字</span>
+        <span class="option-tag tag-d">深蓝渐变 · 亮青</span>
+      </div>
+      <div class="card-preview" style="background:#0d1b2a">
+        <div class="card" style="background:linear-gradient(135deg,#0d1b2a 0%,#1b3a4b 100%);border-radius:12px;padding:32px 26px;box-shadow:0 0 40px rgba(74,222,180,0.06),0 8px 32px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06)">
+          <div class="card-tag" style="color:#4adeb8">🔥 干货</div>
+          <div class="card-title" style="font-weight:800;color:#f1f5f9;font-size:20px;letter-spacing:-0.3px">AI 产品经理的核心能力框架</div>
+          <div class="card-desc" style="color:#94a3b8">从需求到落地，4 个核心能力</div>
+          <ul class="card-points">
+            <li style="color:#cbd5e1;font-weight:500">▸ 技术理解力——知道模型能做什么</li>
+            <li style="color:#cbd5e1;font-weight:500">▸ 数据敏感度——数据质量定上限</li>
+            <li style="color:#cbd5e1;font-weight:500">▸ 体验设计力——不确定性需新范式</li>
+          </ul>
+          <a class="card-cta" style="background:linear-gradient(135deg,#4adeb8,#06b6d4);color:#0d1b2a;font-weight:700" href="#">阅读全文 →</a>
+          <div class="card-meta" style="border-top-color:rgba(255,255,255,0.06);color:#94a3b8">
+            <div class="card-ava" style="background:linear-gradient(135deg,#4adeb8,#06b6d4);color:#0d1b2a">W</div>
+            Waylan · 4 分钟
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">深底渐变 #0d1b2a→#1b3a4b</span>
+        <span class="spec">亮青 #4adeb8</span>
+        <span class="spec">Inter 800 标题</span>
+        <span class="spec">发光阴影</span>
+        <span class="spec">高对比 · 强视觉</span>
+      </div>
+    </div>
+
+    <!-- 方案 E: 高饱和度 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 E · 高饱和活力</span>
+        <span class="option-tag tag-e">黑底 · 荧光橙</span>
+      </div>
+      <div class="card-preview" style="background:#0a0a0a">
+        <div class="card" style="background:#0a0a0a;border-radius:8px;padding:30px 24px;border:2px solid rgba(255,107,0,0.15);box-shadow:0 0 30px rgba(255,107,0,0.05)">
+          <div class="card-tag" style="color:#ff6b00;font-weight:700;letter-spacing:1px">⚡ 核心干货</div>
+          <div class="card-title" style="font-weight:900;color:#fff;font-size:22px;text-transform:uppercase;letter-spacing:-0.5px">AI 产品经理核心能力</div>
+          <div class="card-desc" style="color:rgba(255,255,255,0.55);font-weight:500">从需求到落地 · 4 个关键</div>
+          <ul class="card-points">
+            <li style="color:rgba(255,255,255,0.8);font-weight:500">▸ 技术理解力</li>
+            <li style="color:rgba(255,255,255,0.8);font-weight:500">▸ 数据敏感度</li>
+            <li style="color:rgba(255,255,255,0.8);font-weight:500">▸ 体验设计力</li>
+          </ul>
+          <a class="card-cta" style="background:#ff6b00;color:#fff;border-radius:4px" href="#">阅读全文 →</a>
+          <div class="card-meta" style="border-top-color:rgba(255,107,0,0.15);color:rgba(255,255,255,0.4)">
+            <div class="card-ava" style="background:#ff6b00;color:#fff;border-radius:4px">W</div>
+            Waylan · 4 分钟
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">纯黑底 #0a0a0a</span>
+        <span class="spec">荧光橙 #ff6b00</span>
+        <span class="spec">Inter 900 大写</span>
+        <span class="spec">直角 8px</span>
+        <span class="spec">极高对比 · 冲击力</span>
+      </div>
+    </div>
+
+    <!-- 方案 F: 赛博霓虹 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 F · 赛博霓虹</span>
+        <span class="option-tag tag-f">深紫 · 电蓝</span>
+      </div>
+      <div class="card-preview" style="background:#0c0a1a">
+        <div class="card" style="background:linear-gradient(135deg,#0c0a1a 0%,#1a0a2e 100%);border-radius:16px;padding:30px 24px;border:1px solid rgba(176,38,255,0.12);box-shadow:0 0 40px rgba(0,191,255,0.04),0 8px 32px rgba(0,0,0,0.4)">
+          <div class="card-tag" style="color:#00bfff;letter-spacing:1px;font-weight:500">✦ 深度拆解</div>
+          <div class="card-title" style="font-weight:800;color:#f0e6ff;font-size:20px;letter-spacing:0.2px">AI 产品经理核心能力框架</div>
+          <div class="card-desc" style="color:rgba(255,255,255,0.5)">从需求分析到模型落地</div>
+          <ul class="card-points">
+            <li style="color:rgba(240,230,255,0.75);font-weight:400">▸ 技术理解力：知道模型能做什么</li>
+            <li style="color:rgba(240,230,255,0.75);font-weight:400">▸ 数据敏感度：训练数据定上限</li>
+            <li style="color:rgba(240,230,255,0.75);font-weight:400">▸ 体验设计力：不确定性需新范式</li>
+          </ul>
+          <a class="card-cta" style="background:linear-gradient(135deg,#b026ff,#00bfff);color:#fff;font-weight:700;box-shadow:0 2px 12px rgba(176,38,255,0.3)" href="#">阅读全文 →</a>
+          <div class="card-meta" style="border-top-color:rgba(176,38,255,0.1);color:rgba(255,255,255,0.35)">
+            <div class="card-ava" style="background:linear-gradient(135deg,#b026ff,#00bfff);color:#fff">W</div>
+            Waylan · 4 分钟
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">深紫渐变 #0c0a1a→#1a0a2e</span>
+        <span class="spec">霓虹紫→电蓝</span>
+        <span class="spec">圆角 16px</span>
+        <span class="spec">发光阴影</span>
+        <span class="spec">科技感 · 视觉冲击</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!--  平台 3: 微信朋友圈  -->
+<!-- ================================================================ -->
+<div class="platform">
+  <div class="platform-header">
+    <span class="platform-icon">💬</span>
+    <span class="platform-name">微信朋友圈</span>
+    <span class="platform-desc">1:1 (1080×1080)</span>
+    <span class="platform-specs">简洁 · 低调 · 高质量感</span>
+  </div>
+  <div class="options">
+
+    <!-- 方案 G: 商务简约 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 G · 商务简约</span>
+        <span class="option-tag tag-g">白底 · 靛蓝</span>
+      </div>
+      <div class="card-preview" style="background:#f5f5f5">
+        <div class="card" style="background:#fff;border-radius:12px;padding:28px 24px;box-shadow:0 1px 4px rgba(0,0,0,0.04)">
+          <div class="card-tag" style="color:#4f46e5">分享 · 思考</div>
+          <div class="card-title" style="font-weight:700;color:#1f2937;font-size:17px">AI 产品经理的核心能力框架</div>
+          <div class="card-desc" style="color:#6b7280">从需求分析到模型落地，4 个关键能力。</div>
+          <ul class="card-points">
+            <li style="color:#6b7280">技术理解力：知道模型能做什么、不能做什么</li>
+            <li style="color:#6b7280">数据敏感度：训练数据质量决定产品上限</li>
+            <li style="color:#6b7280">体验设计力：AI 的不确定性需要新的交互范式</li>
+          </ul>
+          <a class="card-cta" style="background:#4f46e5;color:#fff" href="#">阅读全文</a>
+          <div class="card-meta" style="border-top-color:#f3f4f6;color:#9ca3af">
+            <div class="card-ava" style="background:#4f46e5;color:#fff">W</div>
+            Waylan · 4 分钟
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">纯白底 #fff</span>
+        <span class="spec">靛蓝 #4f46e5</span>
+        <span class="spec">圆角 12px</span>
+        <span class="spec">极浅阴影</span>
+        <span class="spec">商务 · 干净</span>
+        <span class="spec">通用性最强</span>
+      </div>
+    </div>
+
+    <!-- 方案 H: 克制的质感 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 H · 低调质感</span>
+        <span class="option-tag tag-h">米灰 · 酒红</span>
+      </div>
+      <div class="card-preview" style="background:#f0eee8">
+        <div class="card" style="background:#faf9f7;border-radius:8px;padding:32px 28px;box-shadow:0 1px 6px rgba(0,0,0,0.03);border-left:3px solid #9a3b5c">
+          <div class="card-tag" style="color:#9a3b5c;font-size:9px;letter-spacing:1px">THOUGHT</div>
+          <div class="card-title" style="font-family:'Playfair Display',serif;font-weight:700;color:#1a1a2e;font-size:18px">AI 产品经理的核心能力框架</div>
+          <div class="card-desc" style="color:#6b6b6b">从需求分析到模型落地，这 4 个能力决定了你能走多远。</div>
+          <ul class="card-points">
+            <li style="color:#5c5c5c">技术理解力—知道模型能做什么、不能做什么</li>
+            <li style="color:#5c5c5c">数据敏感度—训练数据质量决定产品上限</li>
+            <li style="color:#5c5c5c">体验设计力—AI 的不确定性需要新的交互范式</li>
+          </ul>
+          <div class="card-meta" style="border-top-color:#e8e5df;color:#888">
+            <div class="card-ava" style="background:#9a3b5c;color:#faf9f7;border-radius:0">W</div>
+            Waylan · 4 分钟
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">米灰底 #faf9f7</span>
+        <span class="spec">酒红 #9a3b5c</span>
+        <span class="spec">Playfair Display 衬线</span>
+        <span class="spec">左边线 3px</span>
+        <span class="spec">极简 · 安静</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!--  平台 4: LinkedIn / Twitter (全球)  -->
+<!-- ================================================================ -->
+<div class="platform">
+  <div class="platform-header">
+    <span class="platform-icon">🌐</span>
+    <span class="platform-name">LinkedIn / Twitter</span>
+    <span class="platform-desc">1:1 (1080×1080) / 4:5</span>
+    <span class="platform-specs">专业 · 数据驱动 · B2B</span>
+  </div>
+  <div class="options">
+
+    <!-- 方案 I: 数据专业 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 I · 数据专业</span>
+        <span class="option-tag tag-i">深蓝 · 灰蓝</span>
+      </div>
+      <div class="card-preview" style="background:#eef2f7">
+        <div class="card" style="background:#fff;border-radius:12px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,0.04)">
+          <div class="card-tag" style="color:#5477b5;font-weight:600">REPORT</div>
+          <div class="card-title" style="font-weight:700;color:#1e293b;font-size:17px;letter-spacing:-0.2px">AI PM Core Capabilities</div>
+          <div class="card-desc" style="color:#64748b">From requirements to deployment, 4 key skills determine your impact.</div>
+          <ul class="card-points">
+            <li style="color:#475569">Technical literacy — what models can and can't do</li>
+            <li style="color:#475569">Data intuition — data quality defines the ceiling</li>
+            <li style="color:#475569">UX for AI — new interaction paradigms for uncertainty</li>
+          </ul>
+          <a class="card-cta" style="background:#5477b5;color:#fff" href="#">Read more →</a>
+          <div class="card-meta" style="border-top-color:#e2e8f0;color:#94a3b8">
+            <div class="card-ava" style="background:#5477b5;color:#fff">W</div>
+            Waylan · 4 min read
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">白底 #fff</span>
+        <span class="spec">灰蓝 #5477b5</span>
+        <span class="spec">英文内容</span>
+        <span class="spec">圆角 12px</span>
+        <span class="spec">B2B · 专业感</span>
+      </div>
+    </div>
+
+    <!-- 方案 J: 思想领袖 -->
+    <div class="option">
+      <div class="option-header">
+        <span class="option-name">方案 J · 思想领袖</span>
+        <span class="option-tag tag-j">纸色 · 焦糖</span>
+      </div>
+      <div class="card-preview" style="background:#eae4da">
+        <div class="card" style="background:#f4ede1;border-radius:0;padding:32px 28px;box-shadow:0 4px 24px rgba(0,0,0,0.04)">
+          <div class="card-tag" style="color:#b8860b;font-weight:600;letter-spacing:1px">OPINION</div>
+          <div class="card-title" style="font-family:'Playfair Display',serif;font-weight:700;color:#1a1a1a;font-size:20px">AI 产品经理的核心能力框架</div>
+          <div class="card-desc" style="color:#666;font-style:italic">从需求到落地，4 个能力的系统化思考。</div>
+          <ul class="card-points">
+            <li style="color:#555">技术理解力——知道模型能做什么、不能做什么</li>
+            <li style="color:#555">数据敏感度——训练数据质量决定产品上限</li>
+            <li style="color:#555">体验设计力——AI 的不确定性需要新的交互范式</li>
+            <li style="color:#555">落地推动力——从 demo 到产品的最后一公里</li>
+          </ul>
+          <div class="card-meta" style="border-top-color:#ddd5c9;color:#999">
+            <div class="card-ava" style="background:#b8860b;color:#f4ede1">W</div>
+            Waylan
+          </div>
+        </div>
+      </div>
+      <div class="specs">
+        <span class="spec">纸色底 #f4ede1</span>
+        <span class="spec">金褐 #b8860b</span>
+        <span class="spec">Playfair 衬线标题</span>
+        <span class="spec">直角 0px</span>
+        <span class="spec">思想领袖风</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 概要对比表  -->
+<!-- ================================================================ -->
+<div class="platform">
+  <div class="platform-header" style="border-bottom-color:#ccc">
+    <span class="platform-icon">📊</span>
+    <span class="platform-name">方案对比总览</span>
+    <span class="platform-desc">快速对比 10 个方案</span>
+  </div>
+  <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.04)">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:#fafaf8;border-bottom:2px solid #e5e5e0">
+          <th style="padding:14px 16px;text-align:left;font-weight:600">方案</th>
+          <th style="padding:14px 16px;text-align:left;font-weight:600">平台</th>
+          <th style="padding:14px 16px;text-align:left;font-weight:600">色彩基调</th>
+          <th style="padding:14px 16px;text-align:left;font-weight:600">风格关键词</th>
+          <th style="padding:14px 16px;text-align:left;font-weight:600">适合内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>A · 轻柔知性</strong></td><td>小红书</td><td>暖米 + 干枯玫瑰</td><td>温柔、知性、高级感</td><td>职场、成长、心理学</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>B · 清新薄荷</strong></td><td>小红书</td><td>冷白 + 薄荷绿</td><td>清爽、高效、清新</td><td>AI/效率、方法、科技</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>C · 纸张手帐</strong></td><td>小红书</td><td>暖纸 + 陶土棕</td><td>纸感、人文、有温度</td><td>读书笔记、生活方式、书摘</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>D · 渐变大字</strong></td><td>抖音</td><td>深蓝渐变 + 亮青</td><td>专业、质感、B2B感</td><td>泛知识、效率、方法论</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>E · 高饱和活力</strong></td><td>抖音</td><td>纯黑 + 荧光橙</td><td>冲击、高能、醒目</td><td>快讯、清单、短干货</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>F · 赛博霓虹</strong></td><td>抖音</td><td>深紫渐变 + 电蓝</td><td>科技、赛博、炫酷</td><td>AI、数字、未来感内容</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>G · 商务简约</strong></td><td>朋友圈</td><td>纯白 + 靛蓝</td><td>干净、通用、不出错</td><td>通用最强（默认方案）</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>H · 低调质感</strong></td><td>朋友圈</td><td>米灰 + 酒红</td><td>安静、文艺、有品味</td><td>深度思考、个人感悟</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>I · 数据专业</strong></td><td>LinkedIn</td><td>白底 + 灰蓝</td><td>B2B、数据、国际化</td><td>英文内容、行业分析</td></tr>
+        <tr style="border-bottom:1px solid #f0f0eb"><td style="padding:12px 16px"><strong>J · 思想领袖</strong></td><td>LinkedIn</td><td>纸色 + 金褐</td><td>专家、有观点、有深度</td><td>思想领袖类英文内容</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="hdr" style="margin-top:0">
+  <p style="font-size:13px;color:#888;margin-top:16px">
+    ⚡ 每个方案在 280px 预览中展示，实际输出按平台规定尺寸。同一平台内卡片共用视觉语言。
+  </p>
+</div>
+
+</body>
+</html>
