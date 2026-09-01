@@ -1,11 +1,11 @@
 @echo off
-title AI æ–‡ç« æŽ’ç‰ˆå·¥å…·
+title AI ÎÄÕÂÅÅ°æ¹¤¾ß
 cd /d "%~dp0"
 
 set SERVE_DIR=.
 if exist out\ ( set SERVE_DIR=out )
 
-REM --- 1. æ‰¾ Pythonï¼ˆpy > python > python3ï¼‰ ---
+REM --- 1. ÕÒ Python£¨py > python > python3£© ---
 set PYTHON_CMD=
 where py >nul 2>nul && set PYTHON_CMD=py
 if not defined PYTHON_CMD (
@@ -16,15 +16,15 @@ if not defined PYTHON_CMD (
 )
 
 if not defined PYTHON_CMD (
-  echo [é”™è¯¯] æœªæ‰¾åˆ° Python 3ï¼Œè¯·å®‰è£…åŽé‡è¯•ã€‚
-  echo ä¸‹è½½åœ°å€: https://www.python.org/downloads/
+  echo [´íÎó] Î´ÕÒµ½ Python 3£¬Çë°²×°ºóÖØÊÔ¡£
+  echo ÏÂÔØµØÖ·: https://www.python.org/downloads/
   echo.
-  echo æˆ–è€…å®‰è£… Node.js åŽè¿è¡Œ: npx serve .
+  echo »òÕß°²×° Node.js ºóÔËÐÐ: npx serve .
   pause
   exit /b 1
 )
 
-REM --- 2. æ£€æµ‹å¯ç”¨ç«¯å£ 3000~3005 ---
+REM --- 2. ¼ì²â¿ÉÓÃ¶Ë¿Ú 3000~3005 ---
 set PORT=3000
 :CHECK_PORT
 netstat -an 2>nul | findstr /C:":%PORT% " >nul
@@ -33,25 +33,25 @@ if not errorlevel 1 (
     set /a PORT+=1
     goto CHECK_PORT
   )
-  echo [é”™è¯¯] ç«¯å£ 3000~3005 å‡è¢«å ç”¨ï¼Œè¯·å…³é—­å…¶ä»–åº”ç”¨åŽé‡è¯•ã€‚
+  echo [´íÎó] ¶Ë¿Ú 3000~3005 ¾ù±»Õ¼ÓÃ£¬Çë¹Ø±ÕÆäËûÓ¦ÓÃºóÖØÊÔ¡£
   pause
   exit /b 1
 )
 
-REM --- 3. å¯åŠ¨æœåŠ¡ ---
+REM --- 3. Æô¶¯·þÎñ ---
 echo =====================================
-echo   AI æ–‡ç« æŽ’ç‰ˆå·¥å…·
-echo   æµè§ˆå™¨æ‰“å¼€ http://localhost:%PORT%
-echo   å…³é—­æ­¤çª—å£å³å¯é€€å‡º
+echo   AI ÎÄÕÂÅÅ°æ¹¤¾ß
+echo   ä¯ÀÀÆ÷´ò¿ª http://localhost:%PORT%
+echo   ¹Ø±Õ´Ë´°¿Ú¼´¿ÉÍË³ö
 echo =====================================
 
 start http://localhost:%PORT%
 %PYTHON_CMD% -m http.server %PORT% --directory %SERVE_DIR%
 
-REM å¦‚æžœ Python å¼‚å¸¸é€€å‡ºï¼ˆç«¯å£å†²çªã€å…¶ä»–é”™è¯¯ï¼‰ï¼Œç»™ç”¨æˆ·çœ‹é”™è¯¯ä¿¡æ¯
+REM Èç¹û Python Òì³£ÍË³ö£¨¶Ë¿Ú³åÍ»¡¢ÆäËû´íÎó£©£¬¸øÓÃ»§¿´´íÎóÐÅÏ¢
 if errorlevel 1 (
   echo.
-  echo [é”™è¯¯] æœåŠ¡å¯åŠ¨å¤±è´¥ï¼Œè¯·æ£€æŸ¥ç«¯å£ %PORT% æ˜¯å¦è¢«å ç”¨ã€‚
-  echo æŒ‰ä»»æ„é”®é€€å‡º...
+  echo [´íÎó] ·þÎñÆô¶¯Ê§°Ü£¬Çë¼ì²é¶Ë¿Ú %PORT% ÊÇ·ñ±»Õ¼ÓÃ¡£
+  echo °´ÈÎÒâ¼üÍË³ö...
   pause >nul
 )
