@@ -131,7 +131,7 @@ async function callGemini(
   messages: ChatMessage[],
   opts: CallOptions
 ): Promise<string> {
-  const model = config.model ?? "gemini-2.5-flash";
+  const model = config.model ?? "gemini-3.5-flash";
   const streamSuffix = opts.stream ? "streamGenerateContent?alt=sse&" : "generateContent?";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:${streamSuffix}key=${config.apiKey}`;
 

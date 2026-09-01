@@ -54,10 +54,10 @@ describe("storage", () => {
 
   describe("defaultConfig", () => {
     it("returns config with default model for each provider", () => {
-      expect(defaultConfig("gemini").model).toBe("gemini-2.5-flash");
-      expect(defaultConfig("anthropic").model).toBe("claude-sonnet-4-6");
-      expect(defaultConfig("openai").model).toBe("gpt-4o-mini");
-      expect(defaultConfig("deepseek").model).toBe("deepseek-chat");
+      expect(defaultConfig("gemini").model).toBe("gemini-3.5-flash");
+      expect(defaultConfig("anthropic").model).toBe("claude-sonnet-5");
+      expect(defaultConfig("openai").model).toBe("gpt-5.4-mini");
+      expect(defaultConfig("deepseek").model).toBe("deepseek-v4-flash");
     });
 
     it("returns empty apiKey", () => {

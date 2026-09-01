@@ -55,7 +55,7 @@ describe("PROVIDER_META", () => {
     };
     expect(cfg.provider).toBe("openai");
     expect(cfg.model).toBeUndefined();
-    cfg.model = "gpt-4o";
-    expect(cfg.model).toBe("gpt-4o");
+    cfg.model = "gpt-5.4-mini";
+    expect(cfg.model).toBe("gpt-5.4-mini");
   });
 });
